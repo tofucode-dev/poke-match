@@ -16,32 +16,34 @@
 
 <div style="perspective: 100vw" class="grid aspect-square w-full grid-cols-4 grid-rows-4 gap-1">
 	{#each grid as pokemon, i}
-		<Square
-			{pokemon}
-			selected={a === i || b === i}
-			found={found.includes(pokemon)}
-			onclick={() => {
-				if (resetTimeout) {
-					clearTimeout(resetTimeout);
-					resetTimeout = null;
-				}
-				if (a === -1 && b === -1) {
-					a = i;
-				} else if (b === -1) {
-					b = i;
-					if (grid[a].name === grid[b].name) {
-						onFound(pokemon);
-					} else {
-						resetTimeout = setTimeout(() => {
-							a = -1;
-							b = -1;
-						}, 1000);
+		{#key i}
+			<Square
+				{pokemon}
+				selected={a === i || b === i}
+				found={found.includes(pokemon)}
+				onclick={() => {
+					if (resetTimeout) {
+						clearTimeout(resetTimeout);
+						resetTimeout = null;
 					}
-				} else {
-					b = -1;
-					a = i;
-				}
-			}}
-		/>
+					if (a === -1 && b === -1) {
+						a = i;
+					} else if (b === -1) {
+						b = i;
+						if (grid[a].name === grid[b].name) {
+							onFound(pokemon);
+						} else {
+							resetTimeout = setTimeout(() => {
+								a = -1;
+								b = -1;
+							}, 1000);
+						}
+					} else {
+						b = -1;
+						a = i;
+					}
+				}}
+			/>
+		{/key}
 	{/each}
 </div>

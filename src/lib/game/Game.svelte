@@ -9,14 +9,19 @@
 	import type { Image } from '$lib/types';
 
 	const level = levels[0];
+	let pokemons: Image[] = $state([]);
+	let grid: Image[] = $state([]);
 
-	let pokemons: Image[] = $state(getPokemonsImageArray());
 	let size: number = $state(level.size);
-	let grid: Image[] = $state(createGrid(level));
 	let found: Image[] = $state([]);
 	let remaining: number = $state(level.duration);
 	let duration: number = $state(level.duration);
 	let playing: boolean = $state(true);
+
+	onMount(() => {
+		pokemons = getPokemonsImageArray();
+		grid = createGrid(level);
+	});
 
 	function createGrid(level: Level) {
 		const copy = pokemons.slice();
@@ -62,13 +67,20 @@
 	onMount(countdown);
 </script>
 
-<div class="text flex h-full flex-col items-center justify-center bg-blue-800 p-10">
-	<div class="container mx-auto max-w-[650px]">
-		<div class="flex h-24 w-full items-center justify-center bg-green-500 text-white">
+<div class="text relative flex h-full flex-col items-center justify-center bg-blue-400 p-10">
+	<div
+		class="absolute h-screen w-screen bg-[url(/background.jpg)] bg-cover bg-center bg-no-repeat"
+	></div>
+	<div class="absolute container mx-auto max-w-[650px]">
+		<div
+			class="mb-2 flex h-24 w-full items-center justify-center rounded-2xl border-2 border-violet-400 text-white backdrop-blur-2xl"
+		>
 			<Countdown {remaining} {duration} />
 		</div>
 		<Grid {grid} {onFound} {found} />
-		<div class="flex h-24 w-full items-center justify-center bg-yellow-500 text-white">
+		<div
+			class="justify-cente mt-2 flex h-24 w-full items-center rounded-2xl border-2 border-violet-400 text-white backdrop-blur-2xl"
+		>
 			<Found {found} />
 		</div>
 	</div>
